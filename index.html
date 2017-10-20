@@ -1,0 +1,115 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="bower_components/codemirror/lib/codemirror.css">
+    <link rel="stylesheet" href="bower_components/codemirror/theme/base16-dark.css">
+    <link rel="stylesheet" href="bower_components/codemirror/addon/hint/show-hint.css">
+    <link rel="stylesheet" href="bower_components/codemirror/addon/fold/foldgutter.css">
+    <style>
+        body{
+            overflow: hidden;
+        }
+        .main{
+            width: auto;
+            height: 100%;
+            margin: 50px;
+        }
+        .CodeMirror{
+            height: 80%;
+        }
+        .flex-select{
+            height: 10%;
+        }
+    </style>
+</head>
+<body>
+<div class="main">
+    <div class="flex-select">
+        <select name="language" id="lang-switch">
+            <option value="javascript">Javascript</option>
+            <option value="text/x-csrc">C</option>
+            <option value="text/x-c++src">C++</option>
+            <option value="text/x-csharp">C#</option>
+            <option value="text/x-java">Java</option>
+            <option value="python">Python3</option>
+            <option value="text/x-php">PHP</option>
+            <option value="text/x-sql">SQL</option>
+        </select>
+    </div>
+    <textarea id="editor" name="editor"></textarea>
+</div>
+<!--Basic-->
+
+<script src="bower_components/jquery/dist/jquery.min.js"></script>
+<script src="bower_components/codemirror/lib/codemirror.js"></script>
+<script src="bower_components/codemirror/keymap/sublime.js"></script>
+
+<!--Mode-->
+<script src="bower_components/codemirror/mode/javascript/javascript.js"></script>
+<script src="bower_components/codemirror/mode/clike/clike.js"></script>
+<script src="bower_components/codemirror/mode/sql/sql.js"></script>
+<script src="bower_components/codemirror/mode/python/python.js"></script>
+<script src="bower_components/codemirror/mode/php/php.js"></script>
+
+<!--hint-->
+<script src="bower_components/codemirror/addon/hint/anyword-hint.js"></script>
+<script src="bower_components/codemirror/addon/hint/javascript-hint.js"></script>
+<script src="bower_components/codemirror/addon/hint/sql-hint.js"></script>
+<script src="bower_components/codemirror/addon/hint/show-hint.js"></script>
+
+<!--brackets-->
+<script src="bower_components/codemirror/addon/edit/closebrackets.js"></script>
+
+<!--fold-->
+<script src="bower_components/codemirror/addon/fold/foldcode.js"></script>
+<script src="bower_components/codemirror/addon/fold/foldgutter.js"></script>
+<script src="bower_components/codemirror/addon/fold/brace-fold.js"></script>
+<script src="bower_components/codemirror/addon/fold/comment-fold.js"></script>
+
+<script>
+$(()=>{
+    //初始化编辑器
+
+    let textarea=$("#editor")[0],
+        select=document.getElementById("lang-switch"),
+        mode="javascript",
+        keyMap="sublime",
+        options={
+            mode:mode,//加载模块
+            theme:"base16-dark",
+            keyMap:keyMap,//绑定编辑器键位
+            lineNumbers:true,
+            autofocus:true,
+            lineWrapping:true,
+            foldGutter: true,
+            gutters:["CodeMirror-linenumbers", "CodeMirror-foldgutter"],//代码折叠
+            auto:"auto",
+            matchBrackets: true,
+            autoCloseBrackets: true,//括号补全
+        },
+        codeEditor=CodeMirror.fromTextArea(textarea,options);
+
+    codeEditor.setValue("//start from here!");
+
+    codeEditor.on('keypress', ()=>{
+        codeEditor.showHint(); //满足自动触发自动联想功能
+        });
+
+    select.addEventListener('change',()=>{
+
+        let seIndex=select.selectedIndex;
+        mode=select[seIndex].value;
+        console.log(mode)
+        codeEditor.setValue("//start from here!");
+        codeEditor.setOption("mode",mode);
+    })
+
+
+})
+</script>
+</body>
+</html>
